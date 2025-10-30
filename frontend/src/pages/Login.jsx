@@ -3,11 +3,14 @@ import { FaEye, FaEyeSlash, FaLongArrowAltLeft } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { AuthDataContext } from "../context/AuthContext";
 import axios from "axios";
+import { UserDataContext } from "../context/UserContext";
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  const { userData, setUserData } = useContext(UserDataContext)
 
   const navigate = useNavigate();
   const { serverUrl } = useContext(AuthDataContext);
@@ -18,17 +21,18 @@ const Login = () => {
       const result = await axios.post(
         `${serverUrl}/api/auth/login`,
         { email, password },
-        { withCredentials: true } // ✅ correct casing
+        { withCredentials: true }
       );
-
+      setUserData(result.data)
       console.log(result);
+      navigate("/")
 
       // // Optional redirect on success
       // if (result.status === 200) {
       //   navigate("/");
       // }
 
-      
+
     } catch (error) {
       console.error("Login error:", error);
       alert(error.response?.data?.message || "Login failed");

@@ -10,6 +10,8 @@ const SignUp = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  const { userData, setUserData } = useContext(UserDataContext)
+
   const navigate = useNavigate();
   const { serverUrl } = useContext(AuthDataContext);
 
@@ -22,18 +24,19 @@ const SignUp = () => {
         { name, email, password },
         { withCredentials: true } // ✅ camel case
       );
-
+      setUserData(result.data)
+      navigate("/")
       console.log(result);
 
       if (result.status === 201) {
-        navigate("/login"); 
+        navigate("/login");
       }
     } catch (error) {
       console.error("Signup error:", error);
     }
   };
 
- 
+
   return (
     <div className="h-screen w-screen flex items-center justify-center">
       <form
